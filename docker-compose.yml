@@ -1,0 +1,33 @@
+version : '3'
+services:
+  web:
+    # to supress reactjs exit with code 0
+    # overcome to problem which occured in latest version of react
+    stdin_open: true
+
+    build:
+      # directory where dockerfile is located
+      context: .
+      #custom dockerfile
+      dockerfile: Dockerfile.dev
+
+    #mapping ports
+    ports:
+      - "3000:3000"
+
+    #volumes
+    volumes:
+      #bookmarked volume
+      - /app/node_modules
+      #referenced volume
+      - .:/app
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    #command which will overwrite dockerfile command
+    command: ["npm","run","test"]
